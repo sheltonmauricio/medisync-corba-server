@@ -1,0 +1,7 @@
+module Hospital {
+
+    interface HelloService {
+        string sayHello();
+    };
+
+};
