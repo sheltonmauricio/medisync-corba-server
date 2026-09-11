@@ -5,6 +5,9 @@ import Hospital.HelloServiceHelper;
 import org.omg.CORBA.ORB;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
+import org.omg.CosNaming.NameComponent;
+import org.omg.CosNaming.NamingContextExt;
+import org.omg.CosNaming.NamingContextExtHelper;
 
 public class Main {
 
@@ -27,11 +30,18 @@ public class Main {
             HelloService helloServiceRef =
                     HelloServiceHelper.narrow(reference);
 
+            org.omg.CORBA.Object namingReference =
+                    orb.resolve_initial_references("NameService");
+
+            NamingContextExt namingContext =
+                    NamingContextExtHelper.narrow(namingReference);
+
+            NameComponent[] name = namingContext.to_name("HelloService");
+
+            namingContext.rebind(name, helloServiceRef);
+
             System.out.println("Servidor CORBA iniciado.");
-            System.out.println(
-                    "Object reference: " +
-                            orb.object_to_string(helloServiceRef)
-            );
+            System.out.println("HelloService registado no Naming Service.");
 
             orb.run();
 

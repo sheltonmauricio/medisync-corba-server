@@ -3,21 +3,24 @@ package mz.hospital.client;
 import Hospital.HelloService;
 import Hospital.HelloServiceHelper;
 import org.omg.CORBA.ORB;
+import org.omg.CosNaming.NamingContextExt;
+import org.omg.CosNaming.NamingContextExtHelper;
 
 public class TestClient {
 
     public static void main(String[] args) {
 
-        if (args.length != 1) {
-            System.out.println("Uso: TestClient <IOR>");
-            return;
-        }
-
         try {
             ORB orb = ORB.init(args, null);
 
+            org.omg.CORBA.Object namingReference =
+                    orb.resolve_initial_references("NameService");
+
+            NamingContextExt namingContext =
+                    NamingContextExtHelper.narrow(namingReference);
+
             org.omg.CORBA.Object object =
-                    orb.string_to_object(args[0]);
+                    namingContext.resolve_str("HelloService");
 
             HelloService helloService =
                     HelloServiceHelper.narrow(object);
