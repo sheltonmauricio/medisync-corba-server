@@ -1,0 +1,11 @@
+FROM maven:3.9-eclipse-temurin-21
+
+WORKDIR /app
+
+COPY pom.xml .
+COPY src ./src
+
+RUN mvn clean compile
+RUN mvn dependency:build-classpath "-Dmdep.outputFile=classpath.txt"
+
+CMD ["sh", "-c", "java -DOAPort=2809 -Djacorb.ior_proxy_host=172.21.24.227 -Djacorb.ior_proxy_port=2809 -cp target/classes:$(cat classpath.txt) mz.hospital.server.Main -ORBInitRef NameService=corbaloc::corba-nameservice:1050/NameService"]

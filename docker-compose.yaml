@@ -1,0 +1,19 @@
+services:
+
+  corba-nameservice:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: corba-nameservice
+    ports:
+      - "1050:1050"
+
+  medisync-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    container_name: medisync-server
+    depends_on:
+      - corba-nameservice
+    ports:
+      - "2809:2809"
