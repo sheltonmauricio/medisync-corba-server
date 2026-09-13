@@ -4,4 +4,31 @@ module Hospital {
         string sayHello();
     };
 
+    struct Patient {
+        long id;
+        string fullName;
+        string birthDate;
+        string gender;
+        string phone;
+    };
+
+    typedef sequence<Patient> PatientList;
+
+    interface PatientService {
+
+        Patient registerPatient(
+            in string fullName,
+            in string birthDate,
+            in string gender,
+            in string phone
+        );
+
+        Patient findPatientById(
+            in long id
+        );
+
+        PatientList listPatients();
+
+    };
+
 };
