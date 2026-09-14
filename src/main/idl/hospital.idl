@@ -31,4 +31,43 @@ module Hospital {
 
     };
 
+    interface QueueService {
+
+        void addToQueue(
+            in long patientId
+        );
+
+        long getNextPatient();
+
+        long getQueueSize();
+
+    };
+
+    struct Appointment {
+        long id;
+        long patientId;
+        string doctor;
+        string appointmentDate;
+        string specialty;
+    };
+
+    typedef sequence<Appointment> AppointmentList;
+
+    interface AppointmentService {
+
+        Appointment scheduleAppointment(
+            in long patientId,
+            in string doctor,
+            in string appointmentDate,
+            in string specialty
+        );
+
+        Appointment findAppointmentById(
+            in long id
+        );
+
+        AppointmentList listAppointments();
+
+    };
+
 };

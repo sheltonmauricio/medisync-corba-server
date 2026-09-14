@@ -25,12 +25,24 @@ public class DatabaseManager {
                 )
                 """;
 
-        try (Connection connection = getConnection();
-             Statement statement = connection.createStatement()) {
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
 
             statement.execute(sql);
 
             System.out.println("Base de dados inicializada.");
+
+            String appointmentSql = """
+                CREATE TABLE IF NOT EXISTS appointments (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    patient_id INTEGER NOT NULL,
+                    doctor TEXT NOT NULL,
+                    appointment_date TEXT NOT NULL,
+                    specialty TEXT NOT NULL,
+                    FOREIGN KEY (patient_id) REFERENCES patients(id)
+                )
+                """;
+
+            statement.execute(appointmentSql);
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao inicializar a base de dados.", e);

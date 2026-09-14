@@ -1,9 +1,6 @@
 package mz.hospital.server;
 
-import Hospital.HelloService;
-import Hospital.HelloServiceHelper;
-import Hospital.PatientService;
-import Hospital.PatientServiceHelper;
+import Hospital.*;
 import mz.hospital.server.db.DatabaseManager;
 import org.omg.CORBA.ORB;
 import org.omg.PortableServer.POA;
@@ -47,6 +44,9 @@ public class Main {
 
             namingContext.rebind(name, helloServiceRef);
 
+            System.out.println("Servidor CORBA iniciado.");
+            System.out.println("HelloService registado no Naming Service.");
+
             PatientServiceImpl patientService = new PatientServiceImpl();
 
             org.omg.CORBA.Object patientReference =
@@ -60,9 +60,42 @@ public class Main {
 
             namingContext.rebind(patientName, patientServiceRef);
 
-            System.out.println("Servidor CORBA iniciado.");
-            System.out.println("HelloService registado no Naming Service.");
             System.out.println("PatientService registado no Naming Service.");
+
+            QueueServiceImpl queueService = new QueueServiceImpl();
+
+            org.omg.CORBA.Object queueReference =
+                    rootPOA.servant_to_reference(queueService);
+
+            QueueService queueServiceRef =
+                    QueueServiceHelper.narrow(queueReference);
+
+            NameComponent[] queueName =
+                    namingContext.to_name("QueueService");
+
+            namingContext.rebind(queueName, queueServiceRef);
+
+            System.out.println("QueueService registado no Naming Service.");
+
+
+            AppointmentServiceImpl appointmentService =
+                    new AppointmentServiceImpl();
+
+            org.omg.CORBA.Object appointmentReference =
+                    rootPOA.servant_to_reference(appointmentService);
+
+            AppointmentService appointmentServiceRef =
+                    AppointmentServiceHelper.narrow(appointmentReference);
+
+            NameComponent[] appointmentName =
+                    namingContext.to_name("AppointmentService");
+
+            namingContext.rebind(
+                    appointmentName,
+                    appointmentServiceRef
+            );
+
+            System.out.println("AppointmentService registado no Naming Service.");
 
             orb.run();
 
