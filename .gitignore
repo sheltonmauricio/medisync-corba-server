@@ -4,6 +4,9 @@ target/
 !**/src/test/**/target/
 .kotlin
 classpath.txt
+.env
+.env.*
+!.env.example
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

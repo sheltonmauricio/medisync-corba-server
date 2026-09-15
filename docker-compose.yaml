@@ -17,3 +17,5 @@ services:
       - corba-nameservice
     ports:
       - "2809:2809"
+    environment:
+      CORBA_PUBLIC_HOST: ${CORBA_PUBLIC_HOST}
